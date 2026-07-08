@@ -126,9 +126,9 @@ Requested Controller Executes
 
 Displays the URL Shortener dashboard where authenticated users can shorten long URLs.
 
-```md
+
 <img width="1919" height="1006" alt="Screenshot 2026-07-08 175108" src="https://github.com/user-attachments/assets/a42a106f-f0fd-4b2b-a643-0fa3c02879b7" />
-```
+
 
 ---
 
@@ -136,9 +136,9 @@ Displays the URL Shortener dashboard where authenticated users can shorten long 
 
 Displays all shortened URLs created by the logged-in user along with total clicks.
 
-```md
+
 <img width="1917" height="1012" alt="Screenshot 2026-07-08 174804" src="https://github.com/user-attachments/assets/2d0ff5ab-7bbd-4368-a832-c1c67b1f70b0" />
-```
+
 
 ---
 
@@ -146,9 +146,9 @@ Displays all shortened URLs created by the logged-in user along with total click
 
 User authentication page.
 
-```md
+
 <img width="1919" height="1007" alt="Screenshot 2026-07-08 175014" src="https://github.com/user-attachments/assets/489d4322-da2f-48c6-8084-b4077b3854a4" />
-```
+
 
 ---
 
@@ -156,9 +156,9 @@ User authentication page.
 
 Create a new account before logging in.
 
-```md
+
 <img width="1919" height="1007" alt="Screenshot 2026-07-08 175027" src="https://github.com/user-attachments/assets/8ab717ab-15b2-4d79-8821-adb7ded413f0" />
-```
+
 
 ---
 
@@ -176,9 +176,9 @@ Decoded Payload:
 }
 ```
 
-```md
+
 <img width="1771" height="878" alt="Screenshot 2026-07-08 174302" src="https://github.com/user-attachments/assets/c428fab1-2cee-466c-b0fb-82ad31615f1c" />
-```
+
 
 ---
 
