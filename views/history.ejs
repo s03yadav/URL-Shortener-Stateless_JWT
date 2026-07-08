@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL History - SnapURL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a, #1e1b4b, #311042);
+            overflow-y: auto;
+            position: relative;
+            padding: 40px 20px;
+        }
+
+        /* Liquid Background Blobs */
+        .blob {
+            position: absolute;
+            background: linear-gradient(180deg, rgba(99, 102, 241, 0.6) 0%, rgba(168, 85, 247, 0.6) 100%);
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 1;
+            animation: float 10s infinite ease-in-out alternate;
+        }
+
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            top: -10%;
+            left: -10%;
+        }
+
+        .blob-2 {
+            width: 500px;
+            height: 500px;
+            bottom: -20%;
+            right: -10%;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(80px, 50px) scale(1.2); }
+        }
+
+        /* Glassmorphism Container */
+        .glass-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 900px;
+            padding: 3rem 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3),
+                        inset 0 1px 2px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Header Layout */
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h1 i {
+            color: #a855f7;
+        }
+
+        /* Back Button Styling */
+        .back-btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .back-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Responsive Table Wrapper */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            min-width: 600px;
+        }
+
+        th, td {
+            padding: 1rem 1.2rem;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.05);
+            color: #cbd5e1;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background 0.2s ease;
+        }
+
+        tr:last-child {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        td {
+            color: #ffffff;
+            vertical-align: middle;
+        }
+
+        /* Specific Table Data Columns styling */
+        .orig-url {
+            max-width: 220px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #94a3b8;
+        }
+
+        .short-url-link {
+            color: #38bdf8;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .short-url-link:hover {
+            text-decoration: underline;
+            color: #7dd3fc;
+        }
+
+        .clicks-badge {
+            background: rgba(168, 85, 247, 0.2);
+            color: #c084fc;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            display: inline-block;
+        }
+
+        /* Action elements inside table */
+        .actions-cell {
+            display: flex;
+            gap: 8px;
+        }
+
+        .copy-icon-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-icon-btn:hover {
+            background: #ffffff;
+            color: #1e1b4b;
+        }
+
+        /* Empty State */
+        .empty-state {
+            padding: 3rem 1rem;
+            text-align: center;
+            color: #94a3b8;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.15);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="glass-container">
+        
+        <div class="history-header">
+            <h1><i class="fa-solid fa-clock-rotate-left"></i> URL History</h1>
+            <a href="/home/" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i> Back to Shortener
+            </a>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Short Link</th>
+                        <th>Original Destination</th>
+                        <th>Clicks</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (urls && urls.length > 0) { %>
+                        <% urls.forEach(item => { %>
+                            <tr>
+                                <td>
+                                    <a href="<%= item.shortUrl %>" target="_blank" class="short-url-link">
+                                        <%= item.shortUrl %>
+                                    </a>
+                                </td>
+                                <td>
+                                    <div class="orig-url" title="<%= item.redirectUrl %>">
+                                        <%= item.redirectUrl %>
+                                    </div>
+                                </td>
+                                <td>
+                                    <% if (item.visitedHistory.length === 0) { %>
+                                        <span class="clicks-badge">0</span>
+                                    <% } %>
+                                    <% if (item.visitedHistory > 0) { %>
+                                        <span class="clicks-badge"><%= item.visitedHistory %></span>
+                                    <% } %>
+                                </td>
+                                <td class="actions-cell">
+                                    <button class="copy-icon-btn" onclick="copyToClipboard('<%= item.shortURL %>')" title="Copy Link">
+                                        <i class="fa-regular fa-copy"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="4">
+                                <div class="empty-state">
+                                    <i class="fa-solid fa-folder-open"></i>
+                                    <p>No shortened URLs found in your history yet.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        // Copy to clipboard utility function
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('URL copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
